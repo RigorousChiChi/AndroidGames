@@ -11,7 +11,7 @@ import streamlit as st
 
 st.set_page_config(layout="wide")
 
-games = pd.read_csv('C:/Users/Richard Ma/Desktop/datascience/Games//android-games.csv')
+games = pd.read_csv('android-games.csv')
 
 clean_games = games.copy()
 clean_games['rating_sum'] = clean_games['5 star ratings'] + clean_games['4 star ratings'] + clean_games['3 star ratings'] + clean_games['2 star ratings'] + clean_games['1 star ratings']
