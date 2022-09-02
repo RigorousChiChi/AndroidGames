@@ -11,7 +11,7 @@ import streamlit as st
 
 st.set_page_config(layout="wide")
 
-games = pd.read_csv('android-games.csv')
+games = pd.read_csv('C:/Users/Richard Ma/Desktop/datascience/Games//android-games.csv')
 
 clean_games = games.copy()
 clean_games['rating_sum'] = clean_games['5 star ratings'] + clean_games['4 star ratings'] + clean_games['3 star ratings'] + clean_games['2 star ratings'] + clean_games['1 star ratings']
@@ -36,7 +36,7 @@ st.markdown('<p style="font-size:30px">Goal of this case study</p>',unsafe_allow
 st.markdown('<p style="font-size:18px">The goal of this case study is to find out what types of games and what categories could create the most profits for game. This dataframe has a total of 15 columns. There are the following columns: title, average ratings, 1 start to 5 star ratings, growth in the past 30-60 days, installs, and category. The category column contain a total of 17 game categories, and this is an important feature because it could help us group games by categories, which is extrememly helpful for our research question since our goal is to know which category is the most popular and understand what type of game developers should develop.',unsafe_allow_html=True)
 st.markdown('<p style="font-size:18px">',unsafe_allow_html=True)
 st.dataframe(games.head(10))
-###############################################Data Cleaning###########################################
+###############################################Data Cleaning##################################
 st.header('Data Cleaning')
 st.markdown('<p style="font-size:18px">While reading through the data, I found there were more than 100 games in total, which is different to what the description wrote (top 100 games). I was using this line of code:<p>',unsafe_allow_html=True)
 st.code("games.groupby('category').mean()")
@@ -62,35 +62,41 @@ st.markdown('<p style="font-size:18px">The dataframe below is the final "clean_g
 clean_games
 
 st.header('Exploratory data analysis')
-#############################################5 Star Ratings############################################
-st.subheader('5 Star Ratings')
-st.markdown('<p style="font-size:18px">After making sure the dataset is clean, we should move back to the original goal of this case study, which is to find out what categories or types of games are most popular, and gain the most amount of money. I think to approach this question, we should begin with the amount of 5 star ratings, since the amount of people that give 5 star ratings (thinks the game is good) is directly linked to how popular it is.<p>',unsafe_allow_html=True)
+#############################################5 Star Ratings###################################
+st.markdown('<p style="font-size:18px">After making sure the dataset is clean, we should move back to the original goal of this case study, which is to find out which categories or types of games are most popular, and makes the most amount of money. I think to approach this question, we should begin with the amount of 5 star ratings, since the amount of people that give 5 star ratings (thinks the game is good) is directly linked to how popular it is.<p>',unsafe_allow_html=True)
+st.markdown('<p style="font-size:18px">The code below would generate a bar graph that shows the difference with the amount of 5 star ratings, and you can hover your mouse to get more detail about each bar.<p>',unsafe_allow_html=True)
+st.code("px.bar(clean_games,x = 'category',y = '5 star ratings',color = 'category,hover_name = 'title'',color_discrete_sequence = px.colors.qualitative.Antique,title = '',width = 800, height = 800)")
 st.markdown('<p style="color:blue; font-size:19px">Number of 5 Star Rating Per Category for each game<p>',unsafe_allow_html=True)
 fig1 = px.bar(clean_games,x = "category",y = "5 star ratings",color = "category",hover_name = "title",color_discrete_sequence = px.colors.qualitative.Antique,title = '',width = 800, height = 800)
 st.plotly_chart(fig1)
 st.markdown('<p style="font-size:18px">Looking at the chart, we can obviously see that the categories with the most 5 star ratings are GAMES ACTION, GAMES CASUAL, and GAMES SRATEGY. They have a clear difference among the other categories for 5 star ratings. Among these three categries, GAMES ACTION has the most 5 star ratings.So according to how many people like and gives a good rating of the game, GAMES ACTION will be the best category to develop games.<p>',unsafe_allow_html=True)
 st.markdown('<p style="font-size:18px">Note: the amount of 5 star rating could only be  part of your consideration of which game to develop, since if there are a lot of 1 star ratings as well it might not be as popular or good as the category of game for you to develop.<p>',unsafe_allow_html=True)
-#################################################Growth################################################
+#################################################Growth#######################################
 st.subheader('Growth')
-st.markdown('<p style="font-size:18px">Next, besides considering the amount of 5 star ratings each categories, we need to look at their growth as well. If we do not look at the growth and only consider the  amount of 5 star rating when deciding what games we should develop, there might be the possibility where a category gained a lot of 5 star ratings before, when it was extremely popular, but now being outmoded and nobody cares about it now, and that would result in no one installing the game.<p>',unsafe_allow_html=True)
+st.markdown('<p style="font-size:18px">Next, besides considering the amount of 5 star ratings each category has, we need to look at their growth as well. If we do not look at the growth and only consider the  amount of 5 star rating when deciding what games we should develop, there might be the possibility where a category gained a lot of 5 star ratings a long time before, when it was extremely popular, but now being outmoded and nobody cares about it. That would result in no one installing the game.<p>',unsafe_allow_html=True)
 st.markdown('<p style="color:blue; font-size:19px">Growth in the past 60 days in each category<p>',unsafe_allow_html=True)
 growth_60_top50 = clean_games.sort_values(['growth (60 days)','average rating'],ascending = False).reset_index(drop = True).head(50)
 fig2 = px.sunburst(growth_60_top50,names = 'category',values = 'growth (60 days)',path = ['category','title'],width = 800, height = 800)
 st.plotly_chart(fig2)
 st.markdown('<p style="font-size:18px">This graph shows the amount of growth that each category and their top games had gained in the past 60 days. In this graph, we can see that GAME MUSIC, GAME TIVIA and GAME EDUCATIONAL had gained the most growth in the past two months. But does that mean they are the most popular games currently? The growth in calculated in percentage, and a high percentage of growth does not directly result in a high growth in the actual installs. That is because the caltulation of the actual number of growth (60 days or 30 days) is total installs * percentage in growth. If the total amount of installs is very low, then it is much easier to get a high percentage for growth.From that we can conclude that if you want your game to develp quicker in the beginning stage, then you should consider categories such as GAME MUSIC, GAME TRIVIA, and GAME EDUCATIONAL. If you want a more continuous development or ready to put in a lot of resource to make the game to into a very popular game in the future, then it would better to choose the more popular categories.<p>',unsafe_allow_html=True)
-################################################Installs###############################################
+st.markdown('<p style="font-size:18px">This tells us that if we directly look at the growth than we know that these less popular categories grows quicker, however he total amount of installs grows quicker in the popular categories. So if you want to make a small game that grows quickly you should consider the less popular categories.<p>',unsafe_allow_html=True)
+################################################Installs######################################
 st.subheader('Installs')
 st.markdown('<p style="font-size:18px">Last but not least, we should look directly at the amount of installs that each category got in total to see clearly which is the most popular and how many people actually installed the game. Below is a bar graph of the total amount of installs in each category.<p>',unsafe_allow_html=True)
 st.markdown('<p style="color:blue; font-size:19px">The total amount of installs in each category<p>',unsafe_allow_html=True)
 games['installs_int'] = np.where(games['installs'].str.contains('M'),1000000,1000)
 games['installs_int'] = games['installs'].str.replace('M|k','',regex = True).str.strip().astype(float)*games['installs_int']
+st.markdown('<p style="font-size:18px">The first step that we need to do in order to display the data in a graph is get the information that we need. In this case we want the total installs in each category. To get that, we need to use the "groupby function to groud all of the games that has the same category and then sum the installs together, so we add a sum function at the last part to sum all of the installs for each game."<p>',unsafe_allow_html=True)
+st.code("cat_installs = games.groupby('category')['installs_int'].sum().reset_index()")
 cat_installs = games.groupby('category')['installs_int'].sum().reset_index()
+st.markdown('<p style="font-size:18px">After we gave the data we need stored in category-installs (cat-installs), we should use the bar function in plotlyx to generate the bar graph. To do that, we use the code below.<p>',unsafe_allow_html=True)
+st.code("px.bar(cat_installs,x = 'category',y = 'installs_int')")
 fig3 = px.bar(cat_installs,x = 'category',y = 'installs_int')
 st.plotly_chart(fig3)
 st.markdown('<p style="font-size:18px">In this bar graph, we can directly see that the categories with the most amount of installs are actually the ones with the ost amount of 5 star ratings. That makes the 5 star rating graph look very similiar ratio-wise to the installs graph. We easily could find out that same as the 5 star rating graph GAMES ARCADE, GAME CASUAL, and GAME ACTION. However, there is a clear difference between the installs graph and the star rating graph, and the difference in GAME STRATEGY. GAME STRATEGY had got a lot of 5 star ratings compared to the amount of installs that it has, and I believe that means although not as many people downloads this\'s category\'s game as the other extremely popular categories do, more people likes this category. I think that means GAME STRATEGY would be another great category to deveop games in.<p>',unsafe_allow_html=True)
-############################################Conclusion#################################################
+############################################Conclusion########################################
 st.header('Conclusion')
-st.markdown('<p style="font-size:18px">From the results we got in the exploratory analysis, we can start making conclusions to answer our question of which type of games are the best to develop. If we want to develop a game that grows quickly at the early stages and maybe consider selling it quickly, GAME MUSIC, GAME EDUCATIONAL, GAME TRIVIA and other categories that aren\'t as popular would be the best choice. If you would like to make your game big and has a lot of ambition, you should consider developing your game in the top categories such as GAME STRATEGY, GAME ARCADE, GAME CASUAL, and GAME ACTION. Note that GAME STRATEGY has the highest ratio of five star ratings among these give categories, GAME ACTION has the highest total amount of 5 star ratings,  and GAME CASUAL has the most amount of installs. You can make adjustments according to your game and what game do you want to make.<p>',unsafe_allow_html=True)
+st.markdown('<p style="font-size:18px">From the results we got in the exploratory analysis, we can start making conclusions to answer our question of which type of games are the best to develop. If we want to develop a game that grows quickly at the early stages and maybe consider selling it soon, GAME MUSIC, GAME EDUCATIONAL, GAME TRIVIA and other categories that aren\'t as popular would be the best choice, since their installs and ratings grows the quickest. If you would like to make your game big with some ambition, you should consider developing your game in the top categories such as GAME STRATEGY, GAME ARCADE, GAME CASUAL, and GAME ACTION. Note that GAME STRATEGY has the highest ratio of five star ratings among these give categories, GAME ACTION has the highest total amount of 5 star ratings,  and GAME CASUAL has the most amount of installs. You can make adjustments according to your game and what game do you want to make.<p>',unsafe_allow_html=True)
 
 
 
