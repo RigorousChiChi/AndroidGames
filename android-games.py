@@ -11,7 +11,7 @@ import streamlit as st
 
 st.set_page_config(layout="wide")
 
-games = pd.read_csv('android-games.csv')
+games = pd.read_csv('C:/Users/Richard Ma/Desktop/datascience/Games//android-games.csv')
 
 clean_games = games.copy()
 clean_games['rating_sum'] = clean_games['5 star ratings'] + clean_games['4 star ratings'] + clean_games['3 star ratings'] + clean_games['2 star ratings'] + clean_games['1 star ratings']
@@ -36,13 +36,15 @@ st.markdown('<p style="font-size:30px">Goal of this case study</p>',unsafe_allow
 st.markdown('<p style="font-size:18px">The goal of this case study is to find out what types of games and what categories could create the most profits for game. This dataframe has a total of 15 columns. There are the following columns: title, average ratings, 1 start to 5 star ratings, growth in the past 30-60 days, installs, and category. The category column contain a total of 17 game categories, and this is an important feature because it could help us group games by categories, which is extrememly helpful for our research question since our goal is to know which category is the most popular and understand what type of game developers should develop.',unsafe_allow_html=True)
 st.markdown('<p style="font-size:18px">',unsafe_allow_html=True)
 st.dataframe(games.head(10))
+st.markdown('<p style="font-size:18px">Before we actually get into the dataset, we should first define and understand what does some of the columns represent and how was they calculated.',unsafe_allow_html=True)
+st.markdown('<p style="font-size:18px">The first important column is the rank column. It is justifies by considering all columns related to how popular the game is, including the growth, total amount of installs, total amount of ratings, and its average rating. The second column is the growth in the past 30 and 60 days. It is mainly calculated with the percentage of growth from the total installs in the past certain amount of time, while also considering the growth in ratings. But since it mainly focuses on the growth in installs we could understand it as the growth in total amount of installs calculated in percentage. The last column is the ',unsafe_allow_html=True)
 ###############################################Data Cleaning##################################
 st.header('Data Cleaning')
-st.markdown('<p style="font-size:18px">While reading through the data, I found there were more than 100 games in total, which is different to what the description wrote (top 100 games). I was using this line of code:<p>',unsafe_allow_html=True)
-st.code("games.groupby('category').mean()")
-cat_mean =games.groupby('category').mean()
-st.dataframe(cat_mean)
-st.markdown('<p style="font-size:18px">In the rank column, the rank of the games in each of the categories should be from 1 to 100, and in this case if we calculate we could find out that the average of 1 to 100 is 50.5. However, in the GAME CARD, GAME CASUAL, and GAME WORD columns the number presented is not 50.5, and that means the games in that category is either larger or smaller than 100.',unsafe_allow_html=True)
+st.markdown('<p style="font-size:18px">The description in the original dataset said that there are 100 games in each cateogry, but I found out for some categories there were more than 100 games. The following line of code demonstrates this:<p>',unsafe_allow_html=True)
+st.code("games['category'].value_counts()")
+st.dataframe(games['category'].value_counts())
+st.markdown('<p style="font-size:18px">My hypothesis on why are there more games in some categories is that there are duplicates. In GAMES CARD, GAME WORD and GAME CASUAL there are obviously more games than 100. The most possible reason this happened in because of duplicates since the original data only had 100 games, and it is not possible to have games randomly appear.<p>',unsafe_allow_html=True)
+st.markdown('<p style="font-size:18px">The potential problems that couuld be caused by this flaw are massive. The first issue we might run into in the future is that when calculating the average the number that we get might be wrong. That could easily make us get the wrong conclusion and make the entire study worthless. The second main problem is that if we want to select a specific game to compare it with the average, we might get its duplicate with the wrong data. That would also change our conclusion.<p>',unsafe_allow_html=True)
 st.markdown('<p style="font-size:18px">After going more specific into the code, I found out the .values code to see all of the ranks in the rank column, and found the numbers that has duplicates. So I decided to find the duplicates for the "GAME WORD" category first.',unsafe_allow_html=True)
 st.markdown('<p style="font-size:18px">To begin with, I needed to assign the ranks in GAME WORD to a variable that makes it easier to calculate. So I used the .loc code as shown below. I started with finding the GAME WORD category and then went in details with the ranks.',unsafe_allow_html=True)
 st.code("word_ranks = games.loc[games['category'] == 'GAME WORD'].loc[games.duplicated('rank')]")
@@ -60,6 +62,9 @@ st.code("clean_games = games.loc[np.abs(games['total ratings'] - games['rating_s
 st.markdown('<p style="font-size:18px">This line of code locates all of the rows that the absolute value of "total ratings" - "rating_sum" is less than 10. Subtractubg these two columns would show how much difference they have, and I decided to count all +-10 rows since there might be slight difference in between. The ablsolute value is because I am not sure if the "total ratings" column is always greater than the "rating_sum".',unsafe_allow_html=True)
 st.markdown('<p style="font-size:18px">The dataframe below is the final "clean_games" dataframe that deleted all duplicated in the original dataframe.',unsafe_allow_html=True)
 clean_games
+cat_mean =games.groupby('category').mean()
+st.dataframe(cat_mean)
+st.markdown('<p style="font-size:18px">One of the obvious problems we see, is the average of the rank column. If the total amount of games in each category is the same, than the average of their rank should be the same as well.',unsafe_allow_html=True)
 
 st.header('Exploratory data analysis')
 #############################################5 Star Ratings###################################
