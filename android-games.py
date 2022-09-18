@@ -11,7 +11,7 @@ import streamlit as st
 
 st.set_page_config(layout="wide")
 
-games = pd.read_csv('android-games.csv')
+games = pd.read_csv('C:/Users/Richard Ma/Desktop/datascience/Games//android-games.csv')
 
 clean_games = games.copy()
 clean_games['rating_sum'] = clean_games['5 star ratings'] + clean_games['4 star ratings'] + clean_games['3 star ratings'] + clean_games['2 star ratings'] + clean_games['1 star ratings']
@@ -33,7 +33,8 @@ st.sidebar.write('4. ','<a href=#conclusion>Conclusion</a>', unsafe_allow_html=T
 st.title('Case Study on Top Android Games')
 st.markdown('<p style="font-size:30px">Goal of this case study</p>',unsafe_allow_html=True)
 #st.markdown('<p style="color:blue;font-size:24px">This is demoss text</p>',unsafe_allow_html=True)
-st.markdown('<p style="font-size:18px">The goal of this case study is to find out what types of games and what categories could create the most profits for game. This dataframe has a total of 15 columns. There are the following columns: title, average ratings, 1 start to 5 star ratings, growth in the past 30-60 days, installs, and category. The category column contain a total of 17 game categories, and this is an important feature because it could help us group games by categories, which is extrememly helpful for our research question since our goal is to know which category is the most popular and understand what type of game developers should develop.',unsafe_allow_html=True)
+st.markdown('<p style="font-size:18px">There are millions of people who play Android Games. And there are thousands of games out there for players to download and play. What kind of games do people like to play, and what types of games should developers continue to create?',unsafe_allow_html=True)
+st.markdown('<p style="font-size:18px">The goal of this case study is to find out what types and category of Android games create the most profits, analyzing the total amount of installs, average ratings, and growth. This dataframe contains a total of 15 columns: title, average ratings, 1 start to 5 star ratings, growth in the past 30-60 days, installs, and category. The category has a subset of 17 game categories, and this is an important feature because it could help us group games by categories, which is extrememly helpful for our research question since our goal is to know which category is the most popular and understand what type of game developers should develop.',unsafe_allow_html=True)
 st.markdown('<p style="font-size:18px">',unsafe_allow_html=True)
 st.dataframe(games.head(10))
 st.markdown('<p style="font-size:18px">Before we actually get into the dataset, we should first define and understand what does some of the columns represent and how was they calculated.',unsafe_allow_html=True)
